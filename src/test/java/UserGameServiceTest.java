@@ -48,8 +48,10 @@ public class UserGameServiceTest {
 
     @Test
     void testGameOwnedByUser() {
+        // Given the user with email "user1@example.com"
         int userID = AccountService.getUserID("user1@example.com");
 
+        // When & then checking if the user owns specific games
         assertFalse(UserGameService.gameOwned(userID, "The First Berserker"));
         assertTrue(UserGameService.gameOwned(userID, "Hollow Knight"));
         assertFalse(UserGameService.gameOwned(userID, "Cyberpunk"));
@@ -57,19 +59,28 @@ public class UserGameServiceTest {
 
     @Test
     void testAddGameToUser() {
+        // Given the user does not own "Dark Souls"
         int userID = AccountService.getUserID("user1@example.com");
-
         assertFalse(UserGameService.gameOwned(userID, "Dark Souls"));
+
+        // When the user adds "Dark Souls" to their library
         UserGameService.addGameToUser("Dark Souls", userID);
+
+        // Then the user should now own "Dark Souls"
         assertTrue(UserGameService.gameOwned(userID, "Dark Souls"));
     }
 
     @Test
     void testGetUserGames() {
-        List<String> games = UserGameService.getUserGames(AccountService.getUserID("user1@example.com"));
+        // Given the user with email "user1@example.com"
+        int userID = AccountService.getUserID("user1@example.com");
+
+        // When retrieving the list of games owned by the user
+        List<String> games = UserGameService.getUserGames(userID);
+
+        // Then the list of user games should be of size 1 and contain "Dark Souls"
         assertNotNull(games);
         assertEquals(1, games.size());
-
         assertTrue(games.getFirst().contains("Dark Souls"));
     }
 }
