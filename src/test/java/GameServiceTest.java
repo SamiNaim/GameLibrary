@@ -25,107 +25,111 @@ public class GameServiceTest {
 
     @Test
     public void testGameExists_ReturnsTrue_WhenGameIsFound() {
-        // Given
+        // Given the game "The First Berserker" exists in the database
         String gameTitle = "The First Berserker";
 
-        // When
+        // When the system checks if the game exists
         boolean result = GameService.gameExists(gameTitle);
 
-        // Then
+        // Then it returns true
         assertTrue(result, "The game should exist in the database.");
     }
 
     @Test
     public void testGameExists_ReturnsFalse_WhenGameIsNotFound() {
-        // Given
+        // Given the game "Nonexistent Game" does not exist in the database
         String gameTitle = "Nonexistent Game";
 
-        // When
+        // When the system checks if the game exists
         boolean result = GameService.gameExists(gameTitle);
 
-        // Then
+        // Then it returns false
         assertFalse(result, "The game should not exist in the database.");
     }
 
     @Test
     public void testGameInSubscription_ReturnsTrue_WhenGameIsSubscribed() {
-        // Given
+        // Given the game "The First Berserker" is marked as available in the subscription
         String gameTitle = "The First Berserker";
 
-        // When
+        // When the system checks if the game is in the subscription
         boolean result = GameService.gameInSubscription(gameTitle);
 
-        // Then
+        // Then it returns true
         assertTrue(result, "The game should be available in subscription.");
     }
 
     @Test
     public void testGameInSubscription_ReturnsFalse_WhenGameIsNotSubscribed() {
-        // Given
+        // Given the game "The Second Berserker" is not available in the subscription
         GameService.addGame("The Second Berserker", "Meople", Genre.ACTION, 49.99, 80, 0); // Resetting subscription to 0
         String gameTitle = "The Second Berserker";
 
-        // When
+        // When the system checks if the game is in the subscription
         boolean result = GameService.gameInSubscription(gameTitle);
 
-        // Then
+        // Then it returns false
         assertFalse(result, "The game should not be available in subscription.");
     }
 
     @Test
     public void testGetGamePrice_ReturnsCorrectPrice() {
-        // Given
+        // Given the game "The First Berserker" has a price of 59.99
         String gameTitle = "The First Berserker";
 
-        // When
+        // When the system retrieves the price of the game
         double price = GameService.getGamePrice(gameTitle);
 
-        // Then
+        // Then it returns 59.99
         assertEquals(59.99, price, "The price of the game should be correct.");
     }
 
     @Test
     public void testGetAllGames_ReturnsListOfGames() {
-        // When
+        // Given there are games stored in the database
+
+        // When the system retrieves all games
         List<String> games = GameService.getAllGames();
 
-        // Then
+        // Then it returns a non-empty list of game titles
         assertFalse(games.isEmpty(), "The list of games should not be empty.");
     }
 
     @Test
     public void testGetSubscriptionGames_ReturnsListOfSubscriptionGames() {
-        // When
+        // Given the game "The First Berserker" is available in the subscription
+
+        // When the system retrieves all subscription games
         List<String> subscriptionGames = GameService.getSubscriptionGames();
 
-        // Then
+        // Then the list contains "The First Berserker by Neople - action"
         assertTrue(subscriptionGames.contains("The First Berserker by Neople - action"), "The game should be listed in subscription games.");
     }
 
     @Test
     public void testSetGameSubscription_UpdatesSubscriptionCorrectly() {
-        // Given
+        // Given the game "The First Berserker" is available in the subscription
         String gameTitle = "The First Berserker";
 
-        // When
+        // When the system sets the game's subscription status to false
         GameService.setGameSubscription(gameTitle, false);
         boolean result = GameService.gameInSubscription(gameTitle);
 
-        // Then
+        // Then the game is no longer available in the subscription
         assertFalse(result, "The game's subscription status should be updated correctly.");
     }
 
     @Test
     public void testChangeGamePrice_UpdatesPriceCorrectly() {
-        // Given
+        // Given the game "The First Berserker" exists in the database
         String gameTitle = "The First Berserker";
         double newPrice = 49.99;
 
-        // When
+        // When the system updates the game's price to 49.99
         GameService.changeGamePrice(gameTitle, newPrice);
         double updatedPrice = GameService.getGamePrice(gameTitle);
 
-        // Then
+        // Then retrieving the price of the game returns 49.99
         assertEquals(newPrice, updatedPrice, "The price should be updated correctly.");
     }
 }
